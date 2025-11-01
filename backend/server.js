@@ -14,6 +14,10 @@ const wishlistRoutes = require("./routes/wishlist");
 const app = express();
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("✅ NextBuy Backend is running successfully!");
+});
+
 const allowedOrigins = [
   'http://localhost:5173',
   process.env.FRONTEND_URL
