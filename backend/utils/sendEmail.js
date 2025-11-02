@@ -1,36 +1,31 @@
-const nodemailer = require("nodemailer");
+// backend/utils/sendEmail.js
+const { Resend } = require("resend");
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Initialize Resend client with your API key
+const resend = new Resend(process.env.RESEND_API_KEY);
 
+/**
+ * Send email using Resend API
+ * @param {string} to - Recipient email address
+ * @param {string} subject - Subject of the email
+ * @param {string} html - HTML body
+ */
 async function sendEmail(to, subject, html) {
   try {
-    console.log("📧 Attempting to send email...");
-    console.log("To:", to);
-    console.log("From:", process.env.EMAIL_USER);
+    console.log("📨 Sending email to:", to);
 
-    const info = await transporter.sendMail({
-      from: `"NextBuy" <${process.env.EMAIL_USER}>`,
+    const data = await resend.emails.send({
+      from: `"NextBuy" <storetodoorymm@gmail.com>`, // Your Gmail address
       to,
       subject,
       html,
     });
 
-    console.log("✅ Email sent successfully:", info.messageId);
-    return info;
-  } catch (error) {
-    console.error("❌ Email send failed!");
-    console.error("Error name:", error.name);
-    console.error("Error message:", error.message);
-    console.error("Error stack:", error.stack);
-    throw error;
+    console.log("✅ Email sent successfully via Resend:", data);
+    return data;
+  } catch (err) {
+    console.error("❌ Failed to send email:", err);
+    throw err;
   }
 }
 
