@@ -6,26 +6,32 @@ const transporter = nodemailer.createTransport({
   secure: true,
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,  
+    pass: process.env.EMAIL_PASS,
   },
 });
 
-/**
- * Reusable function to send any email (OTP, order, etc.)
- * @param {string} to - Recipient's email
- * @param {string} subject - Email subject
- * @param {string} html - Email HTML content
- */
 async function sendEmail(to, subject, html) {
-  const mailOptions = {
-    from: `"NextBuy" <${process.env.EMAIL_USER}>`,
-    to,
-    subject,
-    html,
-  };
+  try {
+    console.log("📧 Attempting to send email...");
+    console.log("To:", to);
+    console.log("From:", process.env.EMAIL_USER);
 
-  await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail({
+      from: `"NextBuy" <${process.env.EMAIL_USER}>`,
+      to,
+      subject,
+      html,
+    });
+
+    console.log("✅ Email sent successfully:", info.messageId);
+    return info;
+  } catch (error) {
+    console.error("❌ Email send failed!");
+    console.error("Error name:", error.name);
+    console.error("Error message:", error.message);
+    console.error("Error stack:", error.stack);
+    throw error;
+  }
 }
 
 module.exports = sendEmail;
-
