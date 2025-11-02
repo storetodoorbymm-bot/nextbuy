@@ -14,20 +14,33 @@ const wishlistRoutes = require("./routes/wishlist");
 const app = express();
 app.use(express.json());
 
+// ✅ Base route to verify server
 app.get("/", (req, res) => {
   res.send("✅ NextBuy Backend is running successfully!");
 });
 
+// ✅ Allowed origins (add both local + production)
 const allowedOrigins = [
-  'http://localhost:5173',
-  process.env.FRONTEND_URL
-].filter(Boolean);
+  "http://localhost:5173",
+  "https://nextbuy-nu.vercel.app"
+];
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log("❌ Blocked by CORS:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
 
+// ✅ API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/product', productRoutes);
@@ -46,10 +59,8 @@ if (!MONGO_URI) {
 
 console.log("⏳ Connecting to MongoDB Atlas...");
 
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose
+  .connect(MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB connection successful!");
     app.listen(PORT, () => {
@@ -57,9 +68,6 @@ mongoose.connect(MONGO_URI, {
     });
   })
   .catch((err) => {
-    console.error("❌ MongoDB connection failed!");
-    console.error("🔍 Error details:", err.message);
+    console.error("❌ MongoDB connection failed!", err.message);
     process.exit(1);
   });
-
-
