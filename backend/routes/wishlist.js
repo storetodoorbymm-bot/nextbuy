@@ -47,7 +47,7 @@ router.get("/", authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.userId).populate({
       path: "wishlist",
-      select: "title price image description rating stock category"
+      select: "title price image description ourPrice category"
     });
 
     if (!user) {
@@ -105,3 +105,4 @@ router.delete("/clear", authMiddleware, async (req, res) => {
 });
 
 module.exports = router;
+
