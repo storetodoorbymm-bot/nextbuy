@@ -15,7 +15,7 @@ async function sendEmail(to, subject, html) {
     console.log("📨 Sending email to:", to);
 
     const data = await resend.emails.send({
-      from: `"NextBuy" <storetodoorymm@gmail.com>`, // Your Gmail address
+      from: `"NextBuy" <storetodoorbymm@gmail.com>`, // Your Gmail address
       to,
       subject,
       html,
@@ -30,3 +30,4 @@ async function sendEmail(to, subject, html) {
 }
 
 module.exports = sendEmail;
+
