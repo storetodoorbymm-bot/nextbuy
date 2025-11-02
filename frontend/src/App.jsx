@@ -39,7 +39,7 @@ function App() {
         }`}
       >
         <img
-          src="logo.png" 
+          src="/logo.png" 
           alt="NextBuy Logo"
           className="w-40 h-40 object-contain transition-transform duration-500"
         />
