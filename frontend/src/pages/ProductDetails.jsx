@@ -203,7 +203,7 @@ export default function ProductDetails() {
               ))}
             </Swiper>
           ) : (
-            <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
+            <div className="aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden">
               <img
                 src={product.image || "/placeholder-image.jpg"}
                 alt={product.title}
@@ -285,4 +285,5 @@ export default function ProductDetails() {
     </div>
   );
 }
+
 
