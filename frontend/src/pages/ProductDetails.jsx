@@ -210,7 +210,7 @@ export default function ProductDetails() {
 
         {product.description && (
           <div>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="whitespace-pre-line text-gray-600 leading-relaxed">
               {product.description}
             </p>
           </div>
@@ -264,4 +264,5 @@ export default function ProductDetails() {
       </div>
     </div>
   );
+
 }
