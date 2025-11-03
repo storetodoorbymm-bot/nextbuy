@@ -163,7 +163,7 @@ export default function AdminDashboard() {
               <input name="ourPrice" value={product.ourPrice} onChange={handleChange} placeholder="Our Price" type="number" required className="px-4 py-2 border rounded" />
               <input
                 name="images"
-                value={product.images.join(', ')}
+                value={product.images ? product.images.join(', ') : ''}
                 onChange={(e) =>
                   setProduct({
                     ...product,
@@ -255,3 +255,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
