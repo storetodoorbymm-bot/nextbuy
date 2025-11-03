@@ -207,7 +207,7 @@ export default function ProductDetails() {
               <img
                 src={product.image || "/placeholder-image.jpg"}
                 alt={product.title}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
             </div>
           )}
@@ -285,6 +285,7 @@ export default function ProductDetails() {
     </div>
   );
 }
+
 
 
 
