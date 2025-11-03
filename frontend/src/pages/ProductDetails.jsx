@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../utils/axiosConfig";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -25,7 +27,7 @@ export default function ProductDetails() {
       setLoading(false);
       return;
     }
-    
+
     setLoading(true);
     setError(null);
     try {
@@ -83,10 +85,10 @@ export default function ProductDetails() {
       setTimeout(() => {
         setAddedToCart(false);
       }, 3000);
-      
+
     } catch (error) {
       console.error("Failed to add to cart:", error.response?.data || error.message);
-      
+
       if (error.response?.status === 401) {
         alert("Session expired. Please login again.");
         localStorage.removeItem("token");
@@ -104,8 +106,8 @@ export default function ProductDetails() {
   };
 
   const productInWishlist = React.useMemo(() => {
-  return product?._id ? isInWishlist(product._id) : false;
-}, [product?._id, isInWishlist]);
+    return product?._id ? isInWishlist(product._id) : false;
+  }, [product?._id, isInWishlist]);
 
   const handleWishlistToggle = async () => {
     if (!token) {
@@ -128,7 +130,7 @@ export default function ProductDetails() {
       }
     } catch (err) {
       console.error("Wishlist update failed:", err);
-      
+
       if (err.message.includes("login")) {
         navigate("/login");
       } else {
@@ -147,7 +149,7 @@ export default function ProductDetails() {
       </div>
     );
   }
-  
+
   if (error || !product) {
     return (
       <div className="text-center py-20">
@@ -155,7 +157,7 @@ export default function ProductDetails() {
           {error || "Product not found"}
         </div>
         <p className="text-gray-600 mb-6">
-          {error === "Product not found" 
+          {error === "Product not found"
             ? "The product you're looking for doesn't exist or has been removed."
             : "Something went wrong. Please try refreshing the page."
           }
@@ -181,15 +183,34 @@ export default function ProductDetails() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
       <div className="relative">
-        <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
-          <img
-            src={product.image || '/placeholder-image.jpg'}
-            alt={product.title}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.target.src = '/placeholder-image.jpg';
-            }}
-          />
+        <div className="relative">
+          {product.images && product.images.length > 0 ? (
+            <Swiper
+              modules={[Navigation, Pagination]}
+              navigation
+              pagination={{ clickable: true }}
+              className="rounded-xl"
+            >
+              {product.images.map((img, index) => (
+                <SwiperSlide key={index}>
+                  <img
+                    src={img}
+                    alt={`${product.title} ${index + 1}`}
+                    className="w-full h-[400px] object-cover rounded-xl"
+                    onError={(e) => (e.target.src = "/placeholder-image.jpg")}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : (
+            <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
+              <img
+                src={product.image || "/placeholder-image.jpg"}
+                alt={product.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
         </div>
         {productInWishlist && (
           <div className="absolute top-4 right-4 bg-pink-500 text-white p-2 rounded-full shadow-lg">
@@ -225,26 +246,25 @@ export default function ProductDetails() {
             {addingToCart
               ? "Adding to Cart..."
               : addedToCart
-              ? "Added to Cart"
-              : product.stock === 0
-              ? "Out of Stock"
-              : "Add to Cart"}
+                ? "Added to Cart"
+                : product.stock === 0
+                  ? "Out of Stock"
+                  : "Add to Cart"}
           </button>
 
           <button
             onClick={handleWishlistToggle}
             disabled={wishlistLoading || !token}
-            className={`${
-              productInWishlist 
-                ? "bg-red-700" 
+            className={`${productInWishlist
+                ? "bg-red-700"
                 : "bg-gray-600 hover:bg-red-700"
-            } text-white px-8 py-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex-1 font-medium`}
+              } text-white px-8 py-3 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex-1 font-medium`}
           >
             {wishlistLoading
               ? "Updating..."
               : productInWishlist
-              ? "❤️ Remove from Wishlist"
-              : "🤍 Add to Wishlist"}
+                ? "❤️ Remove from Wishlist"
+                : "🤍 Add to Wishlist"}
           </button>
         </div>
 
@@ -264,5 +284,4 @@ export default function ProductDetails() {
       </div>
     </div>
   );
-
 }
