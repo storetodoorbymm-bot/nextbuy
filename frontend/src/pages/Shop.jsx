@@ -59,18 +59,18 @@ const Shop = () => {
 
         <select onChange={(e) => setCategory(e.target.value)} value={category}>
           <option value="all">All</option>
-          <option value="men">Men</option>
-          <option value="women">Women</option>
-          <option value="jewellery">Jewellery</option>
-          <option value="electronics">Electronics</option>
-          <option value="footwear">Footwear</option>
-          <option value="appliances">Appliances</option>
-          <option value="bags">Bags</option>
-          <option value="accessories">Accessories</option>
-          <option value="homedecor">Home Decor</option>
-          <option value="kitchenware">Kitchen Ware</option>
-          <option value="beauty">Beauty</option>
-          <option value="stationery">Stationery</option>
+          <option value="Men">Men</option>
+          <option value="Women">Women</option>
+          <option value="Jewellery">Jewellery</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Footwear">Footwear</option>
+          <option value="Appliances">Appliances</option>
+          <option value="Bags">Bags</option>
+          <option value="Accessories">Accessories</option>
+          <option value="Homedecor">Home Decor</option>
+          <option value="Beauty">Beauty</option>
+          <option value="Stationery">Stationery</option>
+          <option value="Skincare">Skincare</option>
         </select>
 
         <select onChange={(e) => setSort(e.target.value)} value={sort}>
@@ -96,3 +96,4 @@ const Shop = () => {
 };
 
 export default Shop;
+
