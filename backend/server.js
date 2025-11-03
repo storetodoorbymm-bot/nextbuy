@@ -12,12 +12,6 @@ const orderRoutes = require("./routes/order");
 const wishlistRoutes = require("./routes/wishlist");
 
 const app = express();
-app.use(express.json());
-
-// ✅ Base route to verify server
-app.get("/", (req, res) => {
-  res.send("✅ NextBuy Backend is running successfully!");
-});
 
 // ✅ Allowed origins (add both local + production)
 const allowedOrigins = [
@@ -25,6 +19,7 @@ const allowedOrigins = [
   "https://nextbuy-nu.vercel.app"
 ];
 
+// ✅ CORS must come BEFORE express.json() and routes
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -39,6 +34,14 @@ app.use(
     credentials: true,
   })
 );
+
+// ✅ Middleware to handle JSON body
+app.use(express.json());
+
+// ✅ Base route to verify server
+app.get("/", (req, res) => {
+  res.send("✅ NextBuy Backend is running successfully!");
+});
 
 // ✅ API routes
 app.use('/api/auth', authRoutes);
