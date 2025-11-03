@@ -1,34 +1,22 @@
-// backend/utils/sendEmail.js
-const { Resend } = require("resend");
+const SibApiV3Sdk = require("@sendinblue/client");
 
-// Initialize Resend client with your API key
-const resend = new Resend(process.env.RESEND_API_KEY);
+const brevo = new SibApiV3Sdk.TransactionalEmailsApi();
+brevo.setApiKey(SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY);
 
-/**
- * Send email using Resend API
- * @param {string} to - Recipient email address
- * @param {string} subject - Subject of the email
- * @param {string} html - HTML body
- */
 async function sendEmail(to, subject, html) {
+  const email = {
+    sender: { name: "NextBuy", email: process.env.EMAIL_USER },
+    to: [{ email: to }],
+    subject,
+    htmlContent: html,
+  };
+
   try {
-    console.log("📨 Sending email to:", to);
-
-    const data = await resend.emails.send({
-      from: "NextBuy <noreply@nextbuy.resend.dev>",
-      to,
-      subject,
-      html,
-    });
-
-    console.log("✅ Email sent successfully via Resend:", data);
-    return data;
-  } catch (err) {
-    console.error("❌ Failed to send email:", err);
-    throw err;
+    const response = await brevo.sendTransacEmail(email);
+    console.log("✅ Email sent via Brevo:", response.messageId || response);
+  } catch (error) {
+    console.error("❌ Email send failed:", error.message);
   }
 }
 
 module.exports = sendEmail;
-
-
