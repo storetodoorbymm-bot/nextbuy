@@ -8,7 +8,7 @@ export default function AdminDashboard() {
     price: '',
     ourprice: '',
     category: '',
-    image: ''
+    image: []
   });
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -94,7 +94,7 @@ export default function AdminDashboard() {
       price: prod.price,
       ourPrice: prod.ourPrice,
       category: prod.category,
-      image: prod.image
+      images: prod.images || []
     });
     setEditingId(prod._id);
     setMessage('');
@@ -161,7 +161,20 @@ export default function AdminDashboard() {
               <input name="price" value={product.price} onChange={handleChange} placeholder="Price" type="number" required className="px-4 py-2 border rounded" />
               <input name="category" value={product.category} onChange={handleChange} placeholder="Category" required className="px-4 py-2 border rounded" />
               <input name="ourPrice" value={product.ourPrice} onChange={handleChange} placeholder="Our Price" type="number" required className="px-4 py-2 border rounded" />
-              <input name="image" value={product.image} onChange={handleChange} placeholder="Image URL" required className="px-4 py-2 border rounded" />
+              <input
+                name="images"
+                value={product.images.join(', ')}
+                onChange={(e) =>
+                  setProduct({
+                    ...product,
+                    images: e.target.value.split(',').map(url => url.trim())
+                  })
+                }
+                placeholder="Enter multiple image URLs separated by commas"
+                required
+                className="px-4 py-2 border rounded"
+              />
+
             </div>
             <textarea name="description" value={product.description} onChange={handleChange} placeholder="Description" required className="w-full px-4 py-2 border rounded" />
             <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">
